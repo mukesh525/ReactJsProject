@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import Person from './Person/Person'
-import './App.css';
+import Person from '../Components/Persons/Person/Person';
+import Persons from '../Components/Persons/Persons';
+//import './App.css';
+import cssStyles from './App.css';
+
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import Cockpit from '../Components/Cockpit/Cockpit'
+
 
 class App extends Component {
 
@@ -42,6 +48,7 @@ class App extends Component {
   }
   OnChange=(event,id)=>{
     
+   //debugger
     const personIndex = this.state.person.findIndex( p =>{
        return p.id === id;
      });
@@ -54,46 +61,31 @@ class App extends Component {
 
 
   render() {
-    const style ={
-      backgroundColor:'green',
-      font:'inherit',
-      border:'1px solid blue',
-      padding:'8px',
-      cursor:'pointer',
-      color:'white'
-    }
-    
-   
-      let persons = null;
+    let persons = null;
+      let btnclass = '';
       if(this.state.showPerson){
        persons = (
-        <div>
-          {this.state.person.map((person,index) => {
-
-             return <Person 
-                      key={person.id}
-                      click={() => this.deletePerson(index)}
-                      change={(event)=>this.OnChange(event,person.id)}
-                      name={person.name} 
-                      age ={person.age} />
-                  
-             })}
-            </div> 
-
-         
-   
+           <Persons 
+             persons ={this.state.person} 
+             clicked={(index) => this.deletePerson(index)}  
+             changed={(event,id)=>this.OnChange(event,id)}/>
+       
        )
-       style.backgroundColor="red"
+         
+      
      }
      
 
 
     return (
-      <div className="App">
-       <h1>Hi I'am React App</h1>
-          <button  style ={style}onClick={this.switchNameHandler}> Toggle Person</button>
+      <div className={cssStyles.App}>
+           <Cockpit
+             showPersons={this.state.showPersons}
+             persons={this.state.person}
+             switchNameHandler={this.switchNameHandler}
+           />
            {persons}
-         </div>
+      </div>
         
     );
   }
